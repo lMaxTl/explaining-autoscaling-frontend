@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RowItem should render the component 1`] = `
+<tr
+  class="mantine-60yz8o"
+>
+  <td>
+    2022-1-1 1:00:0
+  </td>
+  <td>
+    test
+    /
+    test-deployment
+  </td>
+  <td>
+    <div
+      class="mantine-Grid-root mantine-1azqbd9"
+    >
+      <div
+        class="mantine-Col-root mantine-pzrbb4"
+      >
+        <svg
+          class="mantine-5c15xa"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+            stroke="none"
+          />
+          <polyline
+            points="16 4 20 4 20 8"
+          />
+          <line
+            x1="14"
+            x2="20"
+            y1="10"
+            y2="4"
+          />
+          <polyline
+            points="8 20 4 20 4 16"
+          />
+          <line
+            x1="4"
+            x2="10"
+            y1="20"
+            y2="14"
+          />
+          <polyline
+            points="16 20 20 20 20 16"
+          />
+          <line
+            x1="14"
+            x2="20"
+            y1="14"
+            y2="20"
+          />
+          <polyline
+            points="8 4 4 4 4 8"
+          />
+          <line
+            x1="4"
+            x2="10"
+            y1="4"
+            y2="10"
+          />
+        </svg>
+      </div>
+      <div
+        class="mantine-Col-root mantine-1b3zvi6"
+      >
+        <div
+          class="mantine-Text-root mantine-dp00i"
+        >
+           
+          scaleOut
+           
+        </div>
+      </div>
+    </div>
+  </td>
+  <td>
+    CPU
+  </td>
+  <td>
+    <div
+      class="mantine-Grid-root mantine-1azqbd9"
+    >
+      <div
+        class="mantine-Col-root mantine-pzu1jq"
+      >
+        1
+      </div>
+      <div
+        class="mantine-Col-root mantine-svfr8w"
+      >
+        <svg
+          class="mantine-5c15xa"
+          fill="none"
+          height="24"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 0h24v24H0z"
+            fill="none"
+            stroke="none"
+          />
+          <path
+            d="M18 15l3 -3l-3 -3"
+          />
+          <path
+            d="M3 12h18"
+          />
+          <path
+            d="M3 9v6"
+          />
+        </svg>
+      </div>
+      <div
+        class="mantine-Col-root mantine-pzu1jq"
+      >
+        2
+      </div>
+    </div>
+  </td>
+  <td>
+    <div
+      class="mantine-Grid-root mantine-1azqbd9"
+    >
+      <div
+        class="mantine-Col-root mantine-pzrbb4"
+      >
+        <div
+          class="mantine-ThemeIcon-root mantine-j03v3r"
+        >
+          <svg
+            class="icon icon-tabler icon-tabler-check"
+            fill="none"
+            height="24"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+              stroke="none"
+            />
+            <path
+              d="M5 12l5 5l10 -10"
+            />
+          </svg>
+        </div>
+      </div>
+      <div
+        class="mantine-Col-root mantine-1b3zvi6"
+      >
+        SuccessfulRescale
+      </div>
+    </div>
+  </td>
+</tr>
+`;
