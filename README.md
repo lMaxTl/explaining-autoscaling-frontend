@@ -1,18 +1,28 @@
-# Mantine Next Template
+# Expa Frontend
 
-Get started with Mantine + Next with just a few button clicks.
-Click `Use this template` button at the header of repository or [follow this link](https://github.com/mantinedev/mantine-next-template/generate) and
-create new repository with `@mantine` packages. Note that you have to be logged in to GitHub to generate template.
+## About
+This is the frontend for the Expa project. It is a React application written in TypeScript and built ontop of the NextJS framework. It is currently in development.
 
-## Features
+## Running the frontend locally for development
+To run the frontend locally, you need to have Node.js installed. You can download it from [here](https://nodejs.org/en/download/). After you have installed Node.js, you can run the frontend by running the following commands in the root directory of the project:
 
-This template comes with several essential features:
+```bash
+$ npm install
+$ npm run dev
+```
 
-- Server side rendering setup for Mantine
-- Color scheme is stored in cookie to avoid color scheme mismatch after hydration
-- Storybook with color scheme toggle
-- Jest with react testing library
-- ESLint setup with [eslint-config-mantine](https://github.com/mantinedev/eslint-config-mantine)
+## Deploying the frontend to the cluster
+To deploy the frontend to the cluster you need to have the following tools installed:
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+And you need a Kubernetes cluster. You can create one using [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/).
+
+After you have installed and configured the tools, you can deploy the frontend by running the following commands in the root directory of the project:
+
+```bash
+kubectl create -f 00-config.yml
+kubectl create -f 01-deployment.yml
+```
 
 ## npm scripts
 
