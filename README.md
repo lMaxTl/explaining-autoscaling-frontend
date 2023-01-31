@@ -3,6 +3,25 @@
 ## About
 This is the frontend for the Expa project. It is a React application written in TypeScript and built ontop of the NextJS framework. It is currently in development.
 
+## Overview over folder structure
+ - components/ - contains the ui elements of the frontend
+    - components/Cards/TabbableCard - contains the card that is used to display the metrics
+    - components/DependencyGraph - contains the graph that is used to display the dependency graph
+    - components/Events - contains the event list
+    - components/Metrics/Display - contains the saved metric list
+    - components/Metrics/Information - contains components that are used to display the information of a metric
+    - components/Navbars - contains the navigation bar
+    - components/Pods - contains the table that is used to display information about container in a pod
+    - components/ReplicaSets - contains the component that is used to display information about a replica set 
+    - components/Sidebars - contains the sidebar
+    - components/Timelines - contains the timeline with and without metric information
+    - components/Titles - contains a dynamic title component
+ - helpers/
+    - helpers/DataCollection - contains the code that is used to collect the data from the backend
+    - helpers/DataManipulation - contains the code that is used to manipulate the data
+    - helper/Types - contains the typescript types
+ - pages/ - contains the pages of the frontend
+
 ## Running the frontend locally for development
 To run the frontend locally, you need to have Node.js installed. You can download it from [here](https://nodejs.org/en/download/). After you have installed Node.js, you can run the frontend by running the following commands in the root directory of the project:
 

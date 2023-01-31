@@ -3,7 +3,7 @@ export function formatDate(dateString: string) {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
-    const hours = date.getHours();
+    const hours = date.getHours() - 1;
     let minutes = date.getMinutes().toString();
     if (minutes.length < 2) {
         minutes = '0' + minutes;

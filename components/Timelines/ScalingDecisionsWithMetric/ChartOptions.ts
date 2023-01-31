@@ -9,9 +9,9 @@ export function getOptions(theme: ReturnType<typeof useMantineTheme>) {
         responsive: true,
         plugins: {
             legend: {
-                display: false,
+                display: true,
+                position: 'bottom',
             },
-           
         },
         elements: {
             line: {

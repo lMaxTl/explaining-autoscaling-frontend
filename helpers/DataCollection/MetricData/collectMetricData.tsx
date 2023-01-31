@@ -1,34 +1,63 @@
 import { ChartData } from "chart.js";
+import console from "console";
 import {extractMetricName, formatDate, requestBackend } from "../../helper";
 
+const colors = ['#36a2eb', '#ff6384', '#4bc0c0', '#ff9f40']
+
 export async function collectMetricData(namespace:string, deploymentName:string, metricName:string, from: Date, to: Date) {
-    let data = [];
+    //add 10min to the to date, because the metric data is not available for the exact time
+    to.setMinutes(to.getMinutes() + 10);
+    //remove 10min from the from date, because the metric data is not available for the exact time
+    from.setMinutes(from.getMinutes() - 10);
+    
+    //remove 1 hour from both timestamps to handle the automatic conversion from UTC to local time
+    from.setHours(from.getHours() - 1);
+    to.setHours(to.getHours() - 1);
+
+
+    let datasets = [];
+    let timeLabelsResult : string[] = [];
     if(metricName === "scaleIn") {
-        const latestEvent = await getLatestScaleOutEvent(namespace, deploymentName);
-        if (latestEvent !== undefined) {
-            const {metricQuery, targetValue} = await retrieveMetricQuery(latestEvent.namespace, latestEvent.name, latestEvent.metricType);
-            data = await getMetricData(metricQuery, from, to);
+        const {allMetricNames, allMetricQueries} = await retrieveAllMetricQueries(namespace, deploymentName)
+        let index = 0;
+        for(const metricQuery of allMetricQueries) {
+            const metricData = await getMetricData(metricQuery, from, to);
+            let { timeLabels, values } = extractChartData(metricData);
+            timeLabelsResult = timeLabels;
+            datasets.push({
+                label: allMetricNames[index],
+                data: values,
+                borderColor: colors[index],
+            });
+            index++;
         }
     }
     else {
         const {metricQuery, targetValue} = await retrieveMetricQuery(namespace, deploymentName, metricName);
-        data = await getMetricData(metricQuery, from, to);
+        const data = await getMetricData(metricQuery, from, to);
+        let { timeLabels, values } = extractChartData(data);
+        timeLabelsResult = timeLabels;
+        datasets.push({
+            label: metricName,
+            data: values,
+            borderColor: colors[0],
+        });
     }
+    const chartData: ChartData<'line'> = {
+        labels: timeLabelsResult,
+        datasets: datasets
+    };
+    return chartData;
+}
+
+function extractChartData(data: any[]) {
     let timeLabels = [];
     let values = [];
-    for(let entry of data) {
+    for (let entry of data) {
         timeLabels.push(formatDate(entry[0]));
         values.push(entry[1]);
     }
-    const chartData: ChartData<'line'> = {
-        labels: timeLabels,
-        datasets: [{
-            label: 'CPU Usage',
-            data: values,
-            borderColor: 'rgb(255, 99, 132)',
-        }]
-    };
-    return chartData;
+    return { timeLabels, values };
 }
 
 async function getLatestScaleOutEvent(namespace: string, deploymentName: string) {
@@ -57,6 +86,20 @@ async function getLatestScaleOutEvent(namespace: string, deploymentName: string)
 
     return scalingEvent;
 }
+
+
+
+async function retrieveAllMetricQueries(namespace: string, deploymentName: string) {
+    const allHpaMetrics = await requestBackend({ path: '/hpa/' + namespace + '/' + deploymentName });
+    const allMetricQueries = [];
+    const allMetricNames = [];
+    for(const hpaMetric of allHpaMetrics.currentMetrics) {
+        allMetricQueries.push(hpaMetric.query);
+        allMetricNames.push(extractMetricName(hpaMetric.metricName));
+    }
+    return {allMetricNames, allMetricQueries};
+}
+
 
 export async function retrieveMetricQuery(namespace: string, deploymentName: string, metricName: string) {
     const filter = JSON.stringify({
@@ -98,26 +141,12 @@ export async function retrieveMetricQuery(namespace: string, deploymentName: str
 }
 
 async function getMetricData(metricQuery: string, from: Date, to: Date) {
+    const currentData = await requestBackend({ path: `/prometheus-metrics?metricQuery=${metricQuery}&start=${from}&end=${to}` });
 
-    // Calculate the difference between the from date and the to date and for every 90000000 milliseconds (25 hours) request the data
-    const difference = to.getTime() - from.getTime();
-    const differenceInHours = difference / (1000 * 3600);
-    const numberOfRequests = Math.ceil(differenceInHours / 25);
-
-    let data :any[] = [];
-    for (let i = 0; i < numberOfRequests; i++) {
-        const fromTimestamp = new Date(from.getTime() + (i * 90000000));
-        const toTimestamp = new Date(from.getTime() + ((i + 1) * 90000000));
-        const currentData = await requestBackend({ path: `/prometheus-metrics?metricQuery=${metricQuery}&start=${fromTimestamp}&end=${toTimestamp}&step=5m` });
-   
-        // if currentData contains status code 500, then the metric query is not valid
-        if (currentData.statusCode === 500) {
-            continue;
-        }
-
-        data = data.concat(currentData);
+    let data = [];
+    for (const entry of currentData) {
+        data.push([entry.queriedAt, entry.value]);
     }
-
     return data;
 }
 
@@ -126,7 +155,8 @@ export async function getMetricDataFrom(metricQuery: string, from: Date) {
     if (currentData.statusCode === 500) {
         return ["?"];
     }
-    return currentData.pop()[1];
+    const result = currentData[1];
+    return result;
 }
 
 
