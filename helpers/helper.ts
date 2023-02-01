@@ -40,16 +40,16 @@ interface requestProps {
 export async function requestBackend({ path, sortingOperator, paginationOperator, filterOperator }: requestProps) {
     const apiEventsUrl = process.env.API_URL?.toString() + path;
     let requestUrl = apiEventsUrl + '?';
-    if (sortingOperator != null) {
+    if (sortingOperator !== null) {
         requestUrl += 'sort=' + sortingOperator + '&';
     }
-    if (paginationOperator != null) {
+    if (paginationOperator !== null) {
         requestUrl += 'pagination=' + paginationOperator + '&hasPagination=true&';
     }
-    if (filterOperator != null) {
+    if (filterOperator !== null) {
         requestUrl += 'filters=' + filterOperator + '&';
     }
-    if (sortingOperator == null && paginationOperator == null && filterOperator == null) {
+    if (sortingOperator === null && paginationOperator === null && filterOperator === null) {
         let requestUrl = apiEventsUrl
     }
     const res = await fetch(requestUrl);
