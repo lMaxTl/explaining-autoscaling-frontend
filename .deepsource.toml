@@ -1,0 +1,15 @@
+version = 1
+
+test_patterns = ["*test.tsx"]
+
+[[analyzers]]
+name = "docker"
+
+[[analyzers]]
+name = "javascript"
+
+  [analyzers.meta]
+  plugins = ["react"]
+
+[[transformers]]
+name = "prettier"
