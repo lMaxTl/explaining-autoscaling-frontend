@@ -17,7 +17,7 @@ export default function ShowSavedEvents({ events }: { events: EventProps[] }) {
             </thead>
             <tbody>
                 {events.map((element: any, index: number) => (
-                    <RowItem index={index} element={element} />
+                    <RowItem key={index} index={index} element={element} />
                 ))}
             </tbody>
         </Table>
