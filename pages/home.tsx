@@ -35,6 +35,7 @@ export default function HomePage({ data }: InferGetServerSidePropsType<typeof ge
                     </UiCard>
 
                 </SimpleGrid>
+
             </Container>
         </>
     );
@@ -52,6 +53,7 @@ export const getServerSideProps = async () => {
         timelineData: timelineData,
         chartData: chartData,
         dependencyGraphData: dependencyGraphData,
+
     }
     return {
         props: {

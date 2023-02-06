@@ -59,7 +59,7 @@ export async function requestBackend({
     paginationOperator === null &&
     filterOperator === null
   ) {
-    let requestUrl = apiEventsUrl;
+     requestUrl = apiEventsUrl;
   }
   const res = await fetch(requestUrl);
   const data = await res.json();
