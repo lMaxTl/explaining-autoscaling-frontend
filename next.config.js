@@ -1,9 +1,9 @@
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
 });
 
 module.exports = withBundleAnalyzer({
-  output: 'standalone',
+  output: "standalone",
   reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: true,
@@ -11,11 +11,11 @@ module.exports = withBundleAnalyzer({
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/home',
+        source: "/",
+        destination: "/home",
         permanent: true,
       },
-    ]
+    ];
   },
   // Uncomment the following lines for local development
   // and portforward the backend api to 3000
