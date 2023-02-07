@@ -30,6 +30,12 @@ $ npm install
 $ npm run dev
 ```
 
+It is important to also change the API_URL in the next.config.js file to http://localhost:3000 and portforward the ba-service (kubernetes service of the backend) to your local machine. You can do this by running the following command:
+
+```bash
+$ kubectl port-forward svc/ba 3000:3000
+```
+
 ## Deploying the frontend to the cluster
 To deploy the frontend to the cluster you need to have the following tools installed:
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
