@@ -69,7 +69,6 @@ export async function requestBackend({
 
 // remove the last character of a string if its the character m
 export function parseIfLastCharacterIsM(metricValue: number) {
-
   let metricValueString = metricValue.toString();
   if (metricValueString.endsWith("m")) {
     metricValueString = metricValueString.slice(0, -1);
