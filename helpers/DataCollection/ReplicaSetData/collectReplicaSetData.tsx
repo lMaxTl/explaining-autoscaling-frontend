@@ -26,7 +26,7 @@ export async function collectReplicaSetData(eventId: string, serviceName: string
     let replicaSetNameOld = "No old Replica Set";
     let replicasOld = 0;
     let metricTypeOld = "unknown";
-    if (oldReplicaId !== null) {
+    if (oldReplicaId != null) {
         const oldReplicaSetData = await requestBackend({ path: '/events/' + oldReplicaId });
         const nameOld = oldReplicaSetData.name;
         replicaSetNameOld = nameOld[0].toUpperCase() + nameOld.substring(1) + " Replica Set";

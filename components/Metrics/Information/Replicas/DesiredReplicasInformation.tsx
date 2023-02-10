@@ -8,7 +8,7 @@ export default function QueryInformation({ currentReplicas, currentMetricValue, 
     return (
         <Stack>
             <Text>desiredReplicas = ceil[currentReplicas * (currentMetricValue/desiredMetricValue)]</Text>
-            <Text className={cx(classes.marginToFitEqualSign)}>= ceil[{currentReplicas} * ({currentMetricValue}/{desiredMetricValue})]</Text>
+            <Text className={cx(classes.marginToFitEqualSign)}>= ceil[{currentReplicas} * ({currentMetricValue}/{desiredMetricValue !== 0 ? desiredMetricValue: "Unknown"})]</Text>
             <Text className={cx(classes.marginToFitEqualSign)}>= {Math.ceil(currentReplicas * (currentMetricValue / desiredMetricValue))}</Text>
         </Stack>
     );

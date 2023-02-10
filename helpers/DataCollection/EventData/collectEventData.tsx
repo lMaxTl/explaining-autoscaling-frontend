@@ -36,7 +36,7 @@ export async function collectEventData(numberOfEvents: number) {
 
 async function collectOldReplicaSize(oldReplicaId: number) {
     let oldReplicaSize = 0;
-    if (oldReplicaId !== null) {
+    if (oldReplicaId != null) {
         const oldReplicaSetData = await requestBackend({ path: '/events/' + oldReplicaId });
         oldReplicaSize = oldReplicaSetData.replicaSize;
     }

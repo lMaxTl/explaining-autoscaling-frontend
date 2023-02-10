@@ -1,6 +1,6 @@
 import { ChartData } from "chart.js";
 import console from "console";
-import {extractMetricName, formatDate, requestBackend } from "../../helper";
+import {extractMetricName, formatDate, parseIfLastCharacterIsM, requestBackend } from "../../helper";
 
 const colors = ['#36a2eb', '#ff6384', '#4bc0c0', '#ff9f40']
 
@@ -18,7 +18,8 @@ export async function collectMetricData(namespace:string, deploymentName:string,
     let datasets = [];
     let timeLabelsResult : string[] = [];
     if(metricName === "scaleIn") {
-        const {allMetricNames, allMetricQueries} = await retrieveAllMetricQueries(namespace, deploymentName)
+        const {allMetricNames, allMetricQueries, allMetricTargetValues} = await retrieveAllMetricQueries(namespace, deploymentName)
+ 
         let index = 0;
         for(const metricQuery of allMetricQueries) {
             const metricData = await getMetricData(metricQuery, from, to);
@@ -28,6 +29,12 @@ export async function collectMetricData(namespace:string, deploymentName:string,
                 label: allMetricNames[index],
                 data: values,
                 borderColor: colors[index],
+            });
+            datasets.push({
+                label: allMetricNames[index] + " target",
+                data: new Array(values.length).fill(allMetricTargetValues[index]),
+                borderColor: colors[index],
+                borderDash: [5, 5],
             });
             index++;
         }
@@ -41,6 +48,12 @@ export async function collectMetricData(namespace:string, deploymentName:string,
             label: metricName,
             data: values,
             borderColor: colors[0],
+        });
+        datasets.push({
+                label: metricName + " target",
+                data: new Array(values.length).fill(parseIfLastCharacterIsM(targetValue)),
+                borderColor: colors[0],
+                borderDash: [5, 5],
         });
     }
     const chartData: ChartData<'line'> = {
@@ -93,11 +106,13 @@ async function retrieveAllMetricQueries(namespace: string, deploymentName: strin
     const allHpaMetrics = await requestBackend({ path: '/hpa/' + namespace + '/' + deploymentName });
     const allMetricQueries = [];
     const allMetricNames = [];
+    const allMetricTargetValues = [];
     for(const hpaMetric of allHpaMetrics.currentMetrics) {
         allMetricQueries.push(hpaMetric.query);
         allMetricNames.push(extractMetricName(hpaMetric.metricName));
+        allMetricTargetValues.push(parseIfLastCharacterIsM(hpaMetric.targetValue));
     }
-    return {allMetricNames, allMetricQueries};
+    return {allMetricNames, allMetricQueries, allMetricTargetValues};
 }
 
 
@@ -150,14 +165,6 @@ async function getMetricData(metricQuery: string, from: Date, to: Date) {
     return data;
 }
 
-export async function getMetricDataFrom(metricQuery: string, from: Date) {
-    const currentData = await requestBackend({ path: `/prometheus-metrics?metricQuery=${metricQuery}&start=${from}` });
-    if (currentData.statusCode === 500) {
-        return ["?"];
-    }
-    const result = currentData[1];
-    return result;
-}
 
 
 

@@ -11,12 +11,12 @@ import { ReplicaSetsProps } from "../../components/ReplicaSets/ReplicaSet.dto";
 import Sidebar from "../../components/Sidebars/Sidebar";
 import MetricTimelineDecisions from "../../components/Timelines/ScalingDecisionsWithMetric/TimelineScalingDecisionsWithMetric";
 import DynamicUrlTitle from "../../components/Titles/DynamicUrlTitle";
-import { collectMetricData, getMetricDataFrom, retrieveMetricQuery } from "../../helpers/DataCollection/MetricData/collectMetricData";
+import { collectMetricData, retrieveMetricQuery } from "../../helpers/DataCollection/MetricData/collectMetricData";
 import { collectPodDataForDeployment } from "../../helpers/DataCollection/PodData/collectPodDataForDeployment";
 import { collectReplicaSetData } from "../../helpers/DataCollection/ReplicaSetData/collectReplicaSetData";
 import { collectTimelineDataFor } from "../../helpers/DataCollection/Timelines/collectTimelineData";
 import { getNewestAndOldestTimestampsFromEvents } from "../../helpers/DataCollection/Timelines/getTimestampsFromEvents";
-import { removeLastCharacterIfItsM } from "../../helpers/helper";
+import { parseIfLastCharacterIsM } from "../../helpers/helper";
 import { DetailsPageProps } from "../../helpers/Types/DetailsPageProps.dto";
 
 export default function DetailsPage({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) {
@@ -47,13 +47,13 @@ export default function DetailsPage({ data }: InferGetServerSidePropsType<typeof
 
             <Space h="md" />
 
-            <UiCard title={"Desired Replicas"}>
+            <UiCard title={"Desired Replicas"} description="Calculates the desired replica value kubernetes uses to define how many replicas are required. This only works if a previous scale out event was found.">
                 <DesiredReplicasInformation currentReplicas={data.replicaInformation.currentReplicas} currentMetricValue={data.replicaInformation.currentMetricValue} desiredMetricValue={data.replicaInformation.desiredMetricValue} />
             </UiCard>
 
             <Space h="md" />
 
-            <UiCard title={"Pods"}>
+           <UiCard title={"Pods"}>
                 <PodInformationTable data={data.podInformationData} />
             </UiCard>
 
@@ -71,20 +71,21 @@ export const getServerSideProps: GetServerSideProps<{ data: DetailsPageProps }> 
     const eventName = context.params!.details!.toString();
     const eventID = eventName!.split("-").pop();
     const serviceName = eventName!.split("-").at(0);
+
+
+
     const replicaSetData = await collectReplicaSetData(eventID!, serviceName!);
 
     const { namespace, deploymentName, metricName, metricData, timelineData, eventTimestamp } = await collectMetricTimelineData(eventID!, replicaSetData);
     const { metricQuery, targetValue } = await retrieveMetricQuery(namespace, deploymentName, metricName);
-    const eventDate = new Date(eventTimestamp);
-    
 
-    // Todo: weird return value?
-    const currentMetricValue = await getMetricDataFrom(metricQuery, eventDate)
+    const currentMetricsValue = getCurrentMetricValue(metricData, eventTimestamp);
+
 
     let replicaInformation = {
         currentReplicas: replicaSetData.oldReplicaSet.replicas,
-        desiredMetricValue: removeLastCharacterIfItsM(targetValue),
-        currentMetricValue: currentMetricValue,
+        desiredMetricValue: parseIfLastCharacterIsM(targetValue),
+        currentMetricValue: currentMetricsValue,
     } 
 
     const podInformationData = await collectPodDataForDeployment(namespace, deploymentName, eventTimestamp);
@@ -107,6 +108,19 @@ export const getServerSideProps: GetServerSideProps<{ data: DetailsPageProps }> 
             data: data
         }
     };
+}
+
+function getCurrentMetricValue(metricData:any, eventTimestamp: any) {
+    if(metricData.labels.length === 0) return 0;
+    const metricTimestamp = metricData.labels?.reduce((prev: any, curr: any) => {
+        const eventDate = new Date(Date.parse(eventTimestamp)).getTime();
+        const currDate = new Date(Date.parse(curr)).getTime();
+        const prevDate = new Date(Date.parse(prev)).getTime();
+        return (Math.abs(currDate - eventDate) < Math.abs(prevDate - eventDate) ? curr : prev);
+    });
+    const metricsValue = metricData.datasets[0].data[metricData.labels!.indexOf(metricTimestamp)];
+    const currentMetricsValue = metricsValue ? parseFloat(Number(metricsValue).toFixed(2)):0;
+    return currentMetricsValue;
 }
 
 async function collectMetricTimelineData(eventId:string, replicaSetData: ReplicaSetsProps) {

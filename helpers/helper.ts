@@ -45,34 +45,36 @@ export async function requestBackend({
 }: requestProps) {
   const apiEventsUrl = process.env.API_URL?.toString() + path;
   let requestUrl = apiEventsUrl + "?";
-  if (sortingOperator !== null) {
+  if (sortingOperator != null) {
     requestUrl += "sort=" + sortingOperator + "&";
   }
-  if (paginationOperator !== null) {
+  if (paginationOperator != null) {
     requestUrl += "pagination=" + paginationOperator + "&hasPagination=true&";
   }
-  if (filterOperator !== null) {
+  if (filterOperator != null) {
     requestUrl += "filters=" + filterOperator + "&";
   }
   if (
-    sortingOperator === null &&
-    paginationOperator === null &&
-    filterOperator === null
+    sortingOperator == null &&
+    paginationOperator == null &&
+    filterOperator == null
   ) {
     requestUrl = apiEventsUrl;
   }
+
   const res = await fetch(requestUrl);
   const data = await res.json();
   return data;
 }
 
 // remove the last character of a string if its the character m
-export function removeLastCharacterIfItsM(metricValue: number) {
-  // convert number to string
+export function parseIfLastCharacterIsM(metricValue: number) {
+
   let metricValueString = metricValue.toString();
   if (metricValueString.endsWith("m")) {
     metricValueString = metricValueString.slice(0, -1);
+    metricValue = parseFloat(metricValueString);
+    metricValue = metricValue / 100;
   }
-  metricValue = parseFloat(metricValueString);
   return metricValue;
 }
