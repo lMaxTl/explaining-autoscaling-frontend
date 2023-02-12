@@ -48,7 +48,6 @@ export const getServerSideProps = async () => {
     const chartData = await collectClusterMetricData();
     const dependencyGraphData = await retrieveCustomPodData(new Date().toISOString());
 
-
     const data = {
         timelineData: timelineData,
         chartData: chartData,

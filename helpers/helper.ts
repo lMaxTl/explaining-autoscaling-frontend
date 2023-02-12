@@ -1,15 +1,7 @@
 export function formatDate(dateString: string) {
   const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hours = date.getHours() - 1;
-  let minutes = date.getMinutes().toString();
-  if (minutes.length < 2) {
-    minutes = "0" + minutes;
-  }
-  const seconds = date.getSeconds();
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  const utcDate = date.toUTCString();
+  return utcDate;
 }
 /**
  * The metric name is surrounded by the string tomato, so we need to remove it.

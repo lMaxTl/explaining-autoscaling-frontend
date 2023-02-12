@@ -1,5 +1,5 @@
 import { ChartData } from "chart.js";
-import { formatDate, requestBackend } from "../../helper";
+import { requestBackend } from "../../helper";
 import { ClusterMetricProps } from "../../Types/ClusterMetric.dto";
 
 export async function collectClusterMetricData() {
@@ -70,4 +70,18 @@ export async function collectClusterMetricData() {
     };
     return data;
     
+}
+
+function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    let day = date.getUTCDate().toString().padStart(2, '0');
+    let month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    let year = date.getUTCFullYear().toString().slice(-2);
+
+    let hour = date.getUTCHours().toString().padStart(2, '0');
+    let minute = date.getUTCMinutes().toString().padStart(2, '0');
+    let second = date.getUTCSeconds().toString().padStart(2, '0');
+
+    let formattedDate = `${day}.${month}.${year} ${hour}:${minute}:${second}`;
+    return formattedDate;
 }

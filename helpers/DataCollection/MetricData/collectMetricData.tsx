@@ -11,8 +11,9 @@ export async function collectMetricData(namespace:string, deploymentName:string,
     from.setMinutes(from.getMinutes() - 10);
     
     //remove 1 hour from both timestamps to handle the automatic conversion from UTC to local time
-    from.setHours(from.getHours() - 1);
-    to.setHours(to.getHours() - 1);
+    //console.log(from.getTimezoneOffset())
+    //from.setHours(from.getHours() - 1);
+    //to.setHours(to.getHours() - 1);
 
 
     let datasets = [];
@@ -156,12 +157,12 @@ export async function retrieveMetricQuery(namespace: string, deploymentName: str
 }
 
 async function getMetricData(metricQuery: string, from: Date, to: Date) {
-    const currentData = await requestBackend({ path: `/prometheus-metrics?metricQuery=${metricQuery}&start=${from}&end=${to}` });
-
+    const currentData = await requestBackend({ path: `/prometheus-metrics?metricQuery=${metricQuery}&start=${from.toUTCString()}&end=${to.toUTCString()}` });
     let data = [];
     for (const entry of currentData) {
         data.push([entry.queriedAt, entry.value]);
     }
+
     return data;
 }
 

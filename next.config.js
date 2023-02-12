@@ -20,6 +20,6 @@ module.exports = withBundleAnalyzer({
   // Uncomment the following lines for local development
   // and portforward the backend api to 3000
   env: {
-    API_URL: "http://localhost:3000",
+    API_URL: "http://expa-backend:3000",
   },
 });
