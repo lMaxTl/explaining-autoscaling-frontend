@@ -23,6 +23,6 @@ export interface DetailsPageProps {
     metricData: ChartData<'line'>;
     metricQuery: string;
     replicaInformation: ReplicaInformationProps;
-    podInformationData: PodInformationTableProps[][];
+    //podInformationData: PodInformationTableProps[][];
     dependencyGraphData: DependencyGraphDataProps;
 }

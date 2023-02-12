@@ -53,11 +53,9 @@ export default function DetailsPage({ data }: InferGetServerSidePropsType<typeof
 
             <Space h="md" />
 
-           <UiCard title={"Pods"}>
+          {/* <UiCard title={"Pods"}>
                 <PodInformationTable data={data.podInformationData} />
-            </UiCard>
-
-            <Space h="md" />
+    </UiCard>*/}
 
             <UiCard title={"Possible Affected Deployments"} id="dependencyChart" description="This graph shows the components of the Monitored System. In each card element the name of the deployment is shown, as well as the current pods to the desired pods in the bottom right corner. There are three different states that the element at the bottom right can take. If the element is green, it means that the desired pods have been reached, if the element is yellow, then scaling is currently in progress, if it is red, then an error occurred during scaling.">
                 <DependencyGraph graphProps={data.dependencyGraphData} />
@@ -88,7 +86,8 @@ export const getServerSideProps: GetServerSideProps<{ data: DetailsPageProps }> 
         currentMetricValue: currentMetricsValue,
     } 
 
-    const podInformationData = await collectPodDataForDeployment(namespace, deploymentName, eventTimestamp);
+    //const podInformationData = await collectPodDataForDeployment(namespace, deploymentName, eventTimestamp);
+
     
     const dependencyGraphData = await retrieveCustomPodData(eventTimestamp);
 
@@ -100,7 +99,7 @@ export const getServerSideProps: GetServerSideProps<{ data: DetailsPageProps }> 
         timelineData: timelineData,
         metricQuery: metricQuery,
         replicaInformation: replicaInformation,
-        podInformationData: podInformationData,
+        //podInformationData: podInformationData,
         dependencyGraphData: dependencyGraphData,
     }
     return {
