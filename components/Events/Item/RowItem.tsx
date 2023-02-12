@@ -24,10 +24,10 @@ export default function RowItem({index, element}: RowItemProps) {
                         </Grid.Col>
                         <Grid.Col span={9}>
                             {element.scalingType == 'scaleOut' &&
-                                (<Text c="green"> {element.scalingType} </Text>)}
+                                (<Text className={cx(classes.scaleOutColor)}> {element.scalingType} </Text>)}
 
                             {element.scalingType == 'scaleIn' &&
-                                (<Text c="yellow"> {element.scalingType} </Text>)}
+                                (<Text className={cx(classes.scaleInColor)}> {element.scalingType} </Text>)}
                         </Grid.Col>
                     </Grid>
                 </td>

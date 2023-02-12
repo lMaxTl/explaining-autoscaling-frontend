@@ -14,5 +14,6 @@ export function getNewReplicaColor() {
 }
 export function getMaxReplicaColor() {
     const theme = useMantineTheme();
-    return theme.colors.dark[4];
+    const dark = theme.colorScheme === 'dark';
+    return dark ? theme.colors.dark[4] : theme.colors.gray[4];
 }
