@@ -47,7 +47,7 @@ export default function DetailsPage({ data }: InferGetServerSidePropsType<typeof
 
             <Space h="md" />
 
-            <UiCard title={"Desired Replicas"} description="Calculates the desired replica value kubernetes uses to define how many replicas are required. This only works if a previous scale out event was found.">
+            <UiCard title={"Desired Replicas"} description="Calculates the desired replica value, which Kubernetes uses to define how many replicas are needed. It scales out if the current metric value is larger than the desired metric value, and scales in if it is smaller.This only works if a previous scale-out event was found.">
                 <DesiredReplicasInformation currentReplicas={data.replicaInformation.currentReplicas} currentMetricValue={data.replicaInformation.currentMetricValue} desiredMetricValue={data.replicaInformation.desiredMetricValue} />
             </UiCard>
 
